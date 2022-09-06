@@ -6,6 +6,7 @@ import Logging from "./library/logging";
 import authorRoutes from "./routes/Author";
 import bookRoute from "./routes/Book";
 import userRoute from "./routes/User";
+import "./config/env";
 
 const router = express();
 

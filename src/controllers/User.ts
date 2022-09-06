@@ -20,4 +20,23 @@ export const createUser = async (req: Request, res: Response) => {
     .catch((error) => res.status(500).json({ error }));
 };
 
-export default { createUser };
+//recupera apenas um usuário por id
+export const getUserById = async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+
+  return User.findById(userId)
+    .then((user) => res.status(200).json({ user }))
+    .catch((error) => res.status(404).json({ error }));
+};
+
+export const getAllUsers = async (req: Request, res: Response) => {
+  return User.find()
+    .then((user) => res.status(200).json({ user }))
+    .catch((error) => res.status(500).json({ error }));
+};
+
+export const login = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+};
+
+export default { createUser, getUserById, getAllUsers };
