@@ -1,5 +1,6 @@
 import express from "express";
 import User from "../controllers/User";
+const Token = require("../middleware/checkToken");
 
 const router = express.Router();
 
@@ -7,9 +8,12 @@ const router = express.Router();
 router.post("/create", User.createUser);
 
 //get todos os usuários
-router.get("/getAll", User.getAllUsers);
+router.get("/getAll", Token, User.getAllUsers);
 
 //get user por id
-router.get("/getOne/:userId", User.getUserById);
+router.get("/getOne/:userId", Token, User.getUserById);
+
+//login
+router.post("/login", User.login);
 
 export = router;

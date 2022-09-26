@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import User from "../models/User";
 import * as bcrypt from "bcrypt";
+const jwt = require("jsonwebtoken");
 
 export const createUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
@@ -37,6 +38,41 @@ export const getAllUsers = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      //verificar se o usuário existe
+      return res.status(404).send({ msg: "Usuário não encontrado" });
+    }
+
+    const checkPassword = await bcrypt.compare(password, user.password);
+
+    if (!checkPassword) {
+      return res.status(422).send({ msg: "Senha Inválida" });
+    }
+
+    const secret = process.env.APP_SECRET;
+
+    const token = jwt.sign(
+      {
+        id: user._id,
+      },
+      secret
+    );
+
+    return res.status(200).send({
+      msg: "Autenticação realizada com sucesso",
+      token,
+      id: user.id,
+    });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ msg: "Aconteceu um erro, tente novamente mais tarde!!" });
+  }
 };
 
-export default { createUser, getUserById, getAllUsers };
+export default { createUser, getUserById, getAllUsers, login };
