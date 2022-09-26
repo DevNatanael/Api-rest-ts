@@ -10,6 +10,8 @@ import "./config/env";
 
 const router = express();
 
+//npm run dev - para rodar o servidor
+
 //conectando com o mongo
 mongoose
   .connect("mongodb://localhost:27017/api")
