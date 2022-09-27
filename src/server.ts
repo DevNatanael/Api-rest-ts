@@ -5,8 +5,12 @@ import mongoose from "mongoose";
 import Logging from "./library/logging";
 import authorRoutes from "./routes/Author";
 import bookRoute from "./routes/Book";
+import userRoute from "./routes/User";
+import "./config/env";
 
 const router = express();
+
+//npm run dev - para rodar o servidor
 
 //conectando com o mongo
 mongoose
@@ -66,6 +70,7 @@ const StartServer = () => {
   });
 
   //routes
+  router.use("/users", userRoute);
   router.use("/authors", authorRoutes);
   router.use("/books", bookRoute);
 
